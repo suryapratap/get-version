@@ -1,0 +1,14 @@
+[package]
+name = "git-version-gen"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gix = "0.86.0" # Pure Rust Git implementation
+
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Enable Link-Time Optimization
+codegen-units = 1   # Maximize optimizations
+panic = "abort"     # Remove panic unwinding
+strip = true        # Automatically strip symbols/debug info
