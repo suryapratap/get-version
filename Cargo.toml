@@ -1,5 +1,5 @@
 [package]
-name = "git-version-gen"
+name = "get-version"
 version = "0.1.0"
 edition = "2024"
 

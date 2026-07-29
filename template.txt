@@ -1,4 +1,4 @@
-Branch: [BRANCH]
-Commit: [COMMIT]
-Tag:    [TAG]
-Date:   [DATE]
+[BRANCH]
+[COMMIT]
+[TAG]
+[DATE]

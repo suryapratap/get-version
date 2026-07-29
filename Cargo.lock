@@ -290,6 +290,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "get-version"
+version = "0.1.0"
+dependencies = [
+ "gix",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -298,13 +305,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "r-efi",
-]
-
-[[package]]
-name = "git-version-gen"
-version = "0.1.0"
-dependencies = [
- "gix",
 ]
 
 [[package]]
