@@ -2,6 +2,7 @@
 name = "get-version"
 version = "0.1.0"
 edition = "2024"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 gix = "0.86.0" # Pure Rust Git implementation

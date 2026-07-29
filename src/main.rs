@@ -127,7 +127,7 @@ fn render_version(template_content: &str) -> String {
                 .map(|t| format_utc_secs(t.seconds))
                 .unwrap_or_else(|| "unknown".to_string());
 
-            let mut latest_tag = "no-tag".to_string();
+            let mut latest_tag = String::new();
             if let Ok(references) = repo.references() {
                 if let Ok(tags) = references.tags() {
                     for tag_ref in tags.flatten() {
@@ -143,7 +143,7 @@ fn render_version(template_content: &str) -> String {
         Err(_) => (
             "no-repo".to_string(),
             "unknown".to_string(),
-            "no-tag".to_string(),
+            String::new(),
             "unknown".to_string(),
         ),
     };
