@@ -119,25 +119,30 @@ fn render_version(template_content: &str) -> String {
                 .map(|id| id.to_string()[..7].to_string())
                 .unwrap_or_else(|_| "unknown".to_string());
 
+            // Prefer a single HEAD commit object for date + nearest-tag lookup.
+            let head_commit = repo.head_commit().ok();
+
             // Commit date = committer time of HEAD (UTC).
-            let date = repo
-                .head_commit()
-                .ok()
+            let date = head_commit
+                .as_ref()
                 .and_then(|c| c.time().ok())
                 .map(|t| format_utc_secs(t.seconds))
                 .unwrap_or_else(|| "unknown".to_string());
 
-            let mut latest_tag = String::new();
-            if let Ok(references) = repo.references() {
-                if let Ok(tags) = references.tags() {
-                    for tag_ref in tags.flatten() {
-                        if let Some(name) = tag_ref.name().shorten().to_owned().to_string().into() {
-                            latest_tag = name;
-                            break;
-                        }
-                    }
-                }
-            }
+            // Nearest tag reachable from HEAD — same idea as `git describe --tags`
+            // (all tags, not only annotated). Empty when none is found.
+            let latest_tag = head_commit
+                .as_ref()
+                .and_then(|c| {
+                    c.describe()
+                        .names(gix::commit::describe::SelectRef::AllTags)
+                        .try_format()
+                        .ok()
+                        .flatten()
+                })
+                .and_then(|fmt| fmt.name.map(|n| n.to_string()))
+                .unwrap_or_default();
+
             (branch_name, commit_sha, latest_tag, date)
         }
         Err(_) => (

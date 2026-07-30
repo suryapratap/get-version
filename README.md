@@ -21,7 +21,7 @@ In pipelines you often need to stamp builds with:
 |-------------|---------|
 | `[BRANCH]`  | Current branch name (or `HEAD` if detached) |
 | `[COMMIT]`  | Short commit SHA (7 characters) |
-| `[TAG]`     | A resolved tag name, or empty if none |
+| `[TAG]`     | Nearest tag reachable from HEAD (`git describe --tags`), or empty if none |
 | `[DATE]`    | HEAD **commit** date (committer time), UTC, `YYYY-MM-DD HH:mm` |
 
 A default template is **embedded in the binary**. You do not need a template file on disk unless you want a custom layout.
@@ -159,7 +159,8 @@ Tip: check the binary into your pipeline tool cache, or publish a release binary
 |-----------|--------|
 | Not inside a git repo | `no-repo` / `unknown` / empty tag / `unknown` |
 | Detached HEAD | Branch becomes `HEAD` |
-| No tags found | Tag is an empty string |
+| No reachable tag | Tag is an empty string |
+| Tag selection | Nearest ancestor tag of HEAD (like `git describe --tags`), not an arbitrary tag name |
 | Commit date | Committer timestamp of HEAD, formatted in **UTC** |
 
 ## Development
