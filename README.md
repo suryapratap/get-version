@@ -29,10 +29,7 @@ A default template is **embedded in the binary**. You do not need a template fil
 Default template content:
 
 ```text
-[BRANCH]
-[COMMIT]
-[TAG]
-[DATE]
+[BRANCH]~[COMMIT]~[TAG]~[DATE]
 ```
 
 ## Quick start
