@@ -105,7 +105,7 @@ fn load_template(path: Option<&str>) -> String {
 }
 
 fn render_version(template_content: &str) -> String {
-    let (branch, commit, tag, date) = match gix::discover(".") {
+    let (branch, commit, tag, distance, date) = match gix::discover(".") {
         Ok(repo) => {
             let branch_name = repo
                 .head_name()
@@ -131,7 +131,7 @@ fn render_version(template_content: &str) -> String {
 
             // Nearest tag reachable from HEAD — same idea as `git describe --tags`
             // (all tags, not only annotated). Empty when none is found.
-            let latest_tag = head_commit
+            let (latest_tag, tag_distance) = head_commit
                 .as_ref()
                 .and_then(|c| {
                     c.describe()
@@ -140,14 +140,19 @@ fn render_version(template_content: &str) -> String {
                         .ok()
                         .flatten()
                 })
-                .and_then(|fmt| fmt.name.map(|n| n.to_string()))
+                .map(|fmt| {
+                    let distance = fmt.depth.to_string();
+                    let tag = fmt.name.map(|n| n.to_string()).unwrap_or_default();
+                    (tag, distance)
+                })
                 .unwrap_or_default();
 
-            (branch_name, commit_sha, latest_tag, date)
+            (branch_name, commit_sha, latest_tag, tag_distance, date)
         }
         Err(_) => (
             "no-repo".to_string(),
             "unknown".to_string(),
+            String::new(),
             String::new(),
             "unknown".to_string(),
         ),
@@ -157,6 +162,7 @@ fn render_version(template_content: &str) -> String {
         .replace("[BRANCH]", &branch)
         .replace("[COMMIT]", &commit)
         .replace("[TAG]", &tag)
+        .replace("[DIST]", &distance)
         .replace("[DATE]", &date)
 }
 
